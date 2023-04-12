@@ -22,7 +22,7 @@ INSTALL_PATH="$(pwd)/tools/install"
 YOSYS_USER_ARGS=""
 YOSYS_ARGS="\
 CONFIG=gcc \
-ABCREV=bafd2a7 ABCURL=https://github.com/berkeley-abc/abc \
+ABCREV=bafd2a7 ABCURL=https://gitee.com/hanm_buaa/abc \
 "
 
 OPENROAD_APP_USER_ARGS=""
