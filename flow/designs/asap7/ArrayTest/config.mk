@@ -1,0 +1,13 @@
+export PLATFORM = asap7
+export DESIGN_NAME = ArrayTest
+export DESIGN_NICKNAME = ArrayTest
+export VERILOG_FILES = designs/src/ArrayTest/*.v
+export SDC_FILE = designs/asap7/ArrayTest/constraint.sdc
+export IO_CONSTRAINTS = designs/asap7/ArrayTest/io.tcl
+BLOCKS = PETest
+export VERILOG_FILES_BLACKBOX = designs/src/ArrayTest/ArrayTest.v
+export MACRO_PLACEMENT_TCL = designs/asap7/ArrayTest/mp.tcl
+export MACRO_PLACE_HALO = 1 1
+export DIE_AREA = 0 0 100 100
+export CORE_AREA = 1 1 99 99
+export PLACE_DENSITY = 0.9

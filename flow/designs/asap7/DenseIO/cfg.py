@@ -4,7 +4,7 @@ import math
 # config.mk
 
 platform = 'asap7'
-design_name = 'PEWS'
+design_name = 'DenseIO'
 os.chdir("./designs/{}/{}".format(platform, design_name))
 
 # core_utilization = 60
@@ -12,10 +12,11 @@ core_utilization = 40
 core_aspect_ratio = 1
 core_margin = 1
 
-die = 15
+# die = 51  # 51 is minimal die size(io number limit)
+die = 50
 margin = 1
 
-place_density = 0.9
+place_density = 0.8
 
 with open('config.mk', 'w') as f:
     def export(name, value):
@@ -73,46 +74,13 @@ with open('constraint.sdc', 'w') as f:
 
 # io.tcl
 
-data_width = 16
-pin_left = \
-    ['io_in_r_stop_weight', 'io_in_r_stall'] + \
-    ['io_in_r_data[{}]'.format(i) for i in range(data_width)]
-pin_right = \
-    ['io_out_r_stop_weight', 'io_out_r_stall'] + \
-    ['io_out_r_data[{}]'.format(i) for i in range(data_width)]
-pin_top = \
-    ['io_in_c_is_weight'] + \
-    ['io_in_c_data[{}]'.format(i) for i in range(data_width)]
-pin_bottom  = \
-    ['io_out_c_is_weight'] + \
-    ['io_out_c_data[{}]'.format(i) for i in range(data_width)]
+N = 528
+pin_left = ['io_left[{}]'.format(i) for i in range(N)]
+pin_right = ['io_right[{}]'.format(i) for i in range(N)]
+pin_top = ['io_top[{}]'.format(i) for i in range(N)]
+pin_bottom = ['io_bottom[{}]'.format(i) for i in range(N)]
 
 with open('io.tcl', 'w') as f:
-    def pin_list_to_str(pin):
-        pin_names_str = '{'
-        for p in pin:
-            pin_names_str += p + ' '
-        pin_names_str += '}'
-        return pin_names_str
-    
-    def pin_list_to_str_mirror(pin0, pin1):
-        assert len(pin0) == len(pin1)
-        pin_names_str = '{'
-        for i in range(len(pin0)):
-            pin_names_str += pin0[i] + ' ' + pin1[i] + ' '
-        pin_names_str += '}'
-        return pin_names_str
-    
-    def set_io_pin_constraint(pin, edge):
-        pin_names_str = pin_list_to_str(pin)
-        assert edge in {'top', 'bottom', 'left', 'right'}
-        f.write('set_io_pin_constraint -pin_names {} -region {}:*\n'.format(pin_names_str, edge))
-        f.write('set_io_pin_constraint -pin_names {} -group -order\n'.format(pin_names_str))
-
-    def set_io_pin_constraint_mirror(pin0, pin1):
-        pin_names_str = pin_list_to_str_mirror(pin0, pin1)
-        f.write('set_io_pin_constraint -mirrored_pins {}\n'.format(pin_names_str))
-
     def place_pin(pin, layer, edge, pos, ftdb=True):
         assert layer in {0, 1, 2}
         assert edge in {'top', 'bottom', 'left', 'right'}
@@ -120,7 +88,7 @@ with open('io.tcl', 'w') as f:
         min_width = [0.018, 0.024, 0.032][layer]
         pin_size = '{' + str(min_width) + ' ' + str(min_width) + '}'
 
-        d_to_edge = min(0.1, 0.5 * margin)
+        d_to_edge = min(0.2, 0.5 * margin)
         if edge == 'top':
             location = '{' + str(pos) + ' ' + str(die - d_to_edge) + '}'
         elif edge == 'bottom':
@@ -136,23 +104,22 @@ with open('io.tcl', 'w') as f:
             ftdb = ''
         f.write('place_pin -pin_name {} -layer {} -location {} -pin_size {} {}\n'.format(pin, layer_name, location, pin_size, ftdb))
 
-    def io_line(cmd, s):
-        f.write('{} {}\n'.format(cmd, s))
-    
-    def evenly_place_pins(pins, edge, layers=(0, 1, 2)):
-        d_to_corner = 2
+    def evenly_place_pins(pins, edge, interval=(2, die - 2), layers=(0, 1, 2)):
         n = math.ceil(len(pins) / len(layers))
         for layer_id, layer in enumerate(layers):
             sub_pins = pins[layer_id * n: (layer_id + 1) * n]
-            d = (die - 2 * d_to_corner) / (len(sub_pins) - 1)
+            d = (interval[1] - interval[0]) / (len(sub_pins) - 1)
             for i, pin in enumerate(sub_pins):
-                pos = d_to_corner + i * d
+                pos = interval[0] + i * d
                 place_pin(pin, layer, edge, pos)
 
-    evenly_place_pins(pin_left, 'left', layers=(0, 1, 2))
-    evenly_place_pins(pin_right, 'right', layers=(0, 1, 2))
-    evenly_place_pins(pin_top, 'top', layers=(0, 1, 2))
-    evenly_place_pins(pin_bottom, 'bottom', layers=(0, 1, 2))
+    # d_to_edge = margin
+    # interval = (margin, die - margin - 20)
+    interval = (margin, die - margin)
+    evenly_place_pins(pin_left, 'left', interval, layers=(0, 1, 2))
+    evenly_place_pins(pin_right, 'right', interval, layers=(0, 1, 2))
+    evenly_place_pins(pin_top, 'top', interval, layers=(0, 1, 2))
+    evenly_place_pins(pin_bottom, 'bottom', interval, layers=(0, 1, 2))
 
 
 

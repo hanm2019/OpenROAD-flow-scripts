@@ -1,21 +1,23 @@
 import os
 import math
+from functools import reduce
 
 # config.mk
 
 platform = 'asap7'
-design_name = 'PEWS'
+design_name = 'PESARA2'
 os.chdir("./designs/{}/{}".format(platform, design_name))
 
-# core_utilization = 60
-core_utilization = 40
+core_utilization = 2
 core_aspect_ratio = 1
 core_margin = 1
 
-die = 15
+die = 61  # minimal die = 61
+# die = 60
 margin = 1
 
-place_density = 0.9
+place_density = 0.8  # near maximal density
+# place_density = 0.2
 
 with open('config.mk', 'w') as f:
     def export(name, value):
@@ -39,6 +41,12 @@ with open('config.mk', 'w') as f:
     export('CORE_AREA', '{} {} {} {}'.format(margin, margin, die - margin, die - margin))
     
     export('PLACE_DENSITY', '{}'.format(place_density))
+
+    # export('HAS_IO_CONSTRAINTS', '1')
+    # export('GUI_NO_TIMING', '1')
+    # export('ENABLE_DP0', '1')
+    # export('IO_PLACER_H', '{M3 M5}')
+    # export('IO_PLACER_V', '{M2 M4}')
 
 
 
@@ -74,18 +82,36 @@ with open('constraint.sdc', 'w') as f:
 # io.tcl
 
 data_width = 16
-pin_left = \
-    ['io_in_r_stop_weight', 'io_in_r_stall'] + \
-    ['io_in_r_data[{}]'.format(i) for i in range(data_width)]
-pin_right = \
-    ['io_out_r_stop_weight', 'io_out_r_stall'] + \
-    ['io_out_r_data[{}]'.format(i) for i in range(data_width)]
-pin_top = \
-    ['io_in_c_is_weight'] + \
-    ['io_in_c_data[{}]'.format(i) for i in range(data_width)]
-pin_bottom  = \
-    ['io_out_c_is_weight'] + \
-    ['io_out_c_data[{}]'.format(i) for i in range(data_width)]
+bypass = 32
+
+prefix = ''
+suffix_list = []
+
+def create_pin():
+    pin_data = ['{}_data_{}'.format(prefix, suffix) for suffix in suffix_list]
+    pin_bypass_list = []
+    for bp in range(bypass):
+        pin_bypass_list.append(['{}_input_from_bypass[{}]'.format(prefix, bp)] + \
+                               ['{}_bypass_{}_{}'.format(prefix, bp, suffix) for suffix in suffix_list])
+    pin = []
+    pin.extend(pin_data)
+    for pin_bypass in pin_bypass_list:
+        pin.extend(pin_bypass)
+    return pin_data, pin_bypass_list, pin
+
+prefix = 'io_in_r'
+suffix_list = ['load_store', 'df_is_ws', 'stall'] + ['data[{}]'.format(i) for i in range(data_width)]
+pin_left_data, pin_left_bypass_list, pin_left = create_pin()
+
+prefix = 'io_out_r'
+pin_right_data, pin_right_bypass_list, pin_right = create_pin()
+
+prefix = 'io_in_c'
+suffix_list = ['is_stationary'] + ['data[{}]'.format(i) for i in range(data_width)]
+pin_top_data, pin_top_bypass_list, pin_top = create_pin()
+
+prefix = 'io_out_c'
+pin_bottom_data, pin_bottom_bypass_list, pin_bottom = create_pin()
 
 with open('io.tcl', 'w') as f:
     def pin_list_to_str(pin):
@@ -102,12 +128,14 @@ with open('io.tcl', 'w') as f:
             pin_names_str += pin0[i] + ' ' + pin1[i] + ' '
         pin_names_str += '}'
         return pin_names_str
-    
-    def set_io_pin_constraint(pin, edge):
+
+    def set_io_pin_constraint(pin, edge, interval='*'):
         pin_names_str = pin_list_to_str(pin)
         assert edge in {'top', 'bottom', 'left', 'right'}
-        f.write('set_io_pin_constraint -pin_names {} -region {}:*\n'.format(pin_names_str, edge))
-        f.write('set_io_pin_constraint -pin_names {} -group -order\n'.format(pin_names_str))
+        if isinstance(interval, tuple):
+            interval = '{}-{}'.format(interval[0], interval[1])
+        f.write('set_io_pin_constraint -region {}:{} -pin_names {}\n'.format(edge, interval, pin_names_str))
+        f.write('set_io_pin_constraint -group -order -pin_names {}\n'.format(pin_names_str))
 
     def set_io_pin_constraint_mirror(pin0, pin1):
         pin_names_str = pin_list_to_str_mirror(pin0, pin1)
@@ -136,23 +164,48 @@ with open('io.tcl', 'w') as f:
             ftdb = ''
         f.write('place_pin -pin_name {} -layer {} -location {} -pin_size {} {}\n'.format(pin, layer_name, location, pin_size, ftdb))
 
-    def io_line(cmd, s):
-        f.write('{} {}\n'.format(cmd, s))
-    
-    def evenly_place_pins(pins, edge, layers=(0, 1, 2)):
-        d_to_corner = 2
+    def evenly_place_pins(pins, edge, interval=(2, die - 2), layers=(0, 1, 2)):
         n = math.ceil(len(pins) / len(layers))
         for layer_id, layer in enumerate(layers):
             sub_pins = pins[layer_id * n: (layer_id + 1) * n]
-            d = (die - 2 * d_to_corner) / (len(sub_pins) - 1)
+            d = (interval[1] - interval[0]) / (len(sub_pins) - 1)
             for i, pin in enumerate(sub_pins):
-                pos = d_to_corner + i * d
+                pos = interval[0] + i * d
                 place_pin(pin, layer, edge, pos)
 
-    evenly_place_pins(pin_left, 'left', layers=(0, 1, 2))
-    evenly_place_pins(pin_right, 'right', layers=(0, 1, 2))
-    evenly_place_pins(pin_top, 'top', layers=(0, 1, 2))
-    evenly_place_pins(pin_bottom, 'bottom', layers=(0, 1, 2))
+    def mlist(l_list):
+        return reduce(lambda x, y: x + y, l_list)
+
+    # data_boundry = 12
+    # away_from_corner = 0.2
+
+    # interval_data = (margin + away_from_corner, data_boundry - away_from_corner)
+    # evenly_place_pins(pin_left_data, 'left', interval_data, (1,))
+    # evenly_place_pins(pin_right_data, 'right', interval_data, (1,))
+    # evenly_place_pins(pin_top_data, 'top', interval_data, (1,))
+    # evenly_place_pins(pin_bottom_data, 'bottom', interval_data, (1,))
+
+    # interval_bypass = (data_boundry + away_from_corner, die - margin - away_from_corner)
+    # group_len = math.ceil(bypass / 3)
+    # for i in {0, 1, 2}:
+    #     evenly_place_pins(mlist(pin_left_bypass_list[i * group_len: (i + 1) * group_len]), 'left', interval_bypass, (i,))
+    #     evenly_place_pins(mlist(pin_right_bypass_list[i * group_len: (i + 1) * group_len]), 'right', interval_bypass, (i,))
+    #     evenly_place_pins(mlist(pin_top_bypass_list[i * group_len: (i + 1) * group_len]), 'top', interval_bypass, (i,))
+    #     evenly_place_pins(mlist(pin_bottom_bypass_list[i * group_len: (i + 1) * group_len]), 'bottom', interval_bypass, (i,))
+
+    pin_left = [pin_left_data] + pin_left_bypass_list
+    pin_right = [pin_right_data] + pin_right_bypass_list
+    pin_top = [pin_top_data] + pin_top_bypass_list
+    pin_bottom = [pin_bottom_data] + pin_bottom_bypass_list
+    away_from_corner = 0.2
+    interval = (margin + away_from_corner, die - margin - away_from_corner)
+    # interval = (margin + away_from_corner, 40 - margin - away_from_corner)
+    group_len = math.ceil(bypass / 3)
+    for i in {0, 1, 2}:
+        evenly_place_pins(mlist(pin_left[i * group_len: (i + 1) * group_len]), 'left', interval, (i,))
+        evenly_place_pins(mlist(pin_right[i * group_len: (i + 1) * group_len]), 'right', interval, (i,))
+        evenly_place_pins(mlist(pin_top[i * group_len: (i + 1) * group_len]), 'top', interval, (i,))
+        evenly_place_pins(mlist(pin_bottom[i * group_len: (i + 1) * group_len]), 'bottom', interval, (i,))
 
 
 

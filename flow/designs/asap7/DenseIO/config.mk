@@ -1,0 +1,9 @@
+export PLATFORM = asap7
+export DESIGN_NAME = DenseIO
+export DESIGN_NICKNAME = DenseIO
+export VERILOG_FILES = $(sort $(wildcard ./designs/src/$(DESIGN_NICKNAME)/*.v))
+export SDC_FILE = ./designs/$(PLATFORM)/$(DESIGN_NICKNAME)/constraint.sdc
+export IO_CONSTRAINTS = ./designs/$(PLATFORM)/$(DESIGN_NICKNAME)/io.tcl
+export DIE_AREA = 0 0 50 50
+export CORE_AREA = 1 1 49 49
+export PLACE_DENSITY = 0.8

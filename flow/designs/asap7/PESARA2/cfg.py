@@ -4,15 +4,14 @@ import math
 # config.mk
 
 platform = 'asap7'
-design_name = 'PEWS'
+design_name = 'PESARA2'
 os.chdir("./designs/{}/{}".format(platform, design_name))
 
-# core_utilization = 60
-core_utilization = 40
+core_utilization = 2
 core_aspect_ratio = 1
 core_margin = 1
 
-die = 15
+die = 165
 margin = 1
 
 place_density = 0.9
@@ -74,18 +73,36 @@ with open('constraint.sdc', 'w') as f:
 # io.tcl
 
 data_width = 16
-pin_left = \
-    ['io_in_r_stop_weight', 'io_in_r_stall'] + \
-    ['io_in_r_data[{}]'.format(i) for i in range(data_width)]
-pin_right = \
-    ['io_out_r_stop_weight', 'io_out_r_stall'] + \
-    ['io_out_r_data[{}]'.format(i) for i in range(data_width)]
-pin_top = \
-    ['io_in_c_is_weight'] + \
-    ['io_in_c_data[{}]'.format(i) for i in range(data_width)]
-pin_bottom  = \
-    ['io_out_c_is_weight'] + \
-    ['io_out_c_data[{}]'.format(i) for i in range(data_width)]
+bypass = 32
+
+prefix = ''
+suffix_list = []
+
+def create_pin():
+    pin_data = ['{}_data_{}'.format(prefix, suffix) for suffix in suffix_list]
+    pin_bypass_list = []
+    for bp in range(bypass):
+        pin_bypass_list.append(['{}_input_from_bypass[{}]'.format(prefix, bp)] + \
+                               ['{}_bypass_{}_{}'.format(prefix, bp, suffix) for suffix in suffix_list])
+    pin = []
+    pin.extend(pin_data)
+    for pin_bypass in pin_bypass_list:
+        pin.extend(pin_bypass)
+    return pin_data, pin_bypass_list, pin
+
+prefix = 'io_in_r'
+suffix_list = ['load_store', 'df_is_ws', 'stall'] + ['data[{}]'.format(i) for i in range(data_width)]
+pin_left_data, pin_left_bypass_list, pin_left = create_pin()
+
+prefix = 'io_out_r'
+pin_right_data, pin_right_bypass_list, pin_right = create_pin()
+
+prefix = 'io_in_c'
+suffix_list = ['is_stationary'] + ['data[{}]'.format(i) for i in range(data_width)]
+pin_top_data, pin_top_bypass_list, pin_top = create_pin()
+
+prefix = 'io_out_c'
+pin_bottom_data, pin_bottom_bypass_list, pin_bottom = create_pin()
 
 with open('io.tcl', 'w') as f:
     def pin_list_to_str(pin):
@@ -102,57 +119,30 @@ with open('io.tcl', 'w') as f:
             pin_names_str += pin0[i] + ' ' + pin1[i] + ' '
         pin_names_str += '}'
         return pin_names_str
-    
-    def set_io_pin_constraint(pin, edge):
+
+    def set_io_pin_constraint(pin, edge, interval='*'):
         pin_names_str = pin_list_to_str(pin)
         assert edge in {'top', 'bottom', 'left', 'right'}
-        f.write('set_io_pin_constraint -pin_names {} -region {}:*\n'.format(pin_names_str, edge))
-        f.write('set_io_pin_constraint -pin_names {} -group -order\n'.format(pin_names_str))
+        if isinstance(interval, tuple):
+            interval = '{}-{}'.format(interval[0], interval[1])
+        f.write('set_io_pin_constraint -region {}:{} -pin_names {}\n'.format(edge, interval, pin_names_str))
+        f.write('set_io_pin_constraint -group -order -pin_names {}\n'.format(pin_names_str))
 
     def set_io_pin_constraint_mirror(pin0, pin1):
         pin_names_str = pin_list_to_str_mirror(pin0, pin1)
         f.write('set_io_pin_constraint -mirrored_pins {}\n'.format(pin_names_str))
 
-    def place_pin(pin, layer, edge, pos, ftdb=True):
-        assert layer in {0, 1, 2}
-        assert edge in {'top', 'bottom', 'left', 'right'}
-        layer_name = 'M{}'.format(layer * 2 + 2 if edge in {'left', 'right'} else layer * 2 + 3)
-        min_width = [0.018, 0.024, 0.032][layer]
-        pin_size = '{' + str(min_width) + ' ' + str(min_width) + '}'
+    group_len = round((die - 2 * margin) / (1 + bypass))
 
-        d_to_edge = min(0.1, 0.5 * margin)
-        if edge == 'top':
-            location = '{' + str(pos) + ' ' + str(die - d_to_edge) + '}'
-        elif edge == 'bottom':
-            location = '{' + str(pos) + ' ' + str(d_to_edge) + '}'
-        elif edge == 'left':
-            location = '{' + str(d_to_edge) + ' ' + str(pos) + '}'
-        else:
-            location = '{' + str(die - d_to_edge) + ' ' + str(pos) + '}'
+    for i, pin_left_bypass in enumerate([pin_left_data] + pin_left_bypass_list):
+        set_io_pin_constraint(pin_left_bypass, 'left', interval=(margin + i * group_len, margin + (i + 1) * group_len))
+    set_io_pin_constraint_mirror(pin_left, pin_right)
 
-        if ftdb == True:
-            ftdb = '-force_to_die_boundary'
-        else:
-            ftdb = ''
-        f.write('place_pin -pin_name {} -layer {} -location {} -pin_size {} {}\n'.format(pin, layer_name, location, pin_size, ftdb))
+    for i, pin_top_bypass in enumerate([pin_top_data] + pin_top_bypass_list):
+        set_io_pin_constraint(pin_top_bypass, 'top', interval=(margin + i * group_len, margin + (i + 1) * group_len))
+    set_io_pin_constraint_mirror(pin_top, pin_bottom)
 
-    def io_line(cmd, s):
-        f.write('{} {}\n'.format(cmd, s))
-    
-    def evenly_place_pins(pins, edge, layers=(0, 1, 2)):
-        d_to_corner = 2
-        n = math.ceil(len(pins) / len(layers))
-        for layer_id, layer in enumerate(layers):
-            sub_pins = pins[layer_id * n: (layer_id + 1) * n]
-            d = (die - 2 * d_to_corner) / (len(sub_pins) - 1)
-            for i, pin in enumerate(sub_pins):
-                pos = d_to_corner + i * d
-                place_pin(pin, layer, edge, pos)
-
-    evenly_place_pins(pin_left, 'left', layers=(0, 1, 2))
-    evenly_place_pins(pin_right, 'right', layers=(0, 1, 2))
-    evenly_place_pins(pin_top, 'top', layers=(0, 1, 2))
-    evenly_place_pins(pin_bottom, 'bottom', layers=(0, 1, 2))
+    set_io_pin_constraint(['clk', 'reset'], 'top')
 
 
 
