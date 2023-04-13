@@ -121,6 +121,7 @@ with open('io.tcl', 'w') as f:
         pin_size = '{' + str(min_width) + ' ' + str(min_width) + '}'
 
         d_to_edge = min(0.1, 0.5 * margin)
+        # pos += layer * 2
         if edge == 'top':
             location = '{' + str(pos) + ' ' + str(die - d_to_edge) + '}'
         elif edge == 'bottom':
