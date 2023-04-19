@@ -1,10 +1,12 @@
 export PLATFORM = asap7
 export DESIGN_NAME = PETest
 export DESIGN_NICKNAME = ArrayTest_PETest
-export VERILOG_FILES = designs/src/ArrayTest/*.v
+export VERILOG_FILES = designs/src/ArrayTest/PETest.v
 export SDC_FILE = designs/asap7/ArrayTest/constraint.sdc
 export IO_CONSTRAINTS = designs/asap7/ArrayTest/PETest/io.tcl
-export DIE_AREA = 0 0 15 15
-export CORE_AREA = 1 1 14 14
-export PLACE_DENSITY = 0.8
+export DIE_AREA = 0 0 12 12
+export CORE_AREA = 0.48 0.48 11.52 11.52
+export PLACE_DENSITY = 0.9
 export MACRO_PLACE_HALO = 1 1
+export GPL_TIMING_DRIVEN = 0
+export GPL_ROUTABLILITY_DRIVEN = 0

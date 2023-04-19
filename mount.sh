@@ -1,4 +1,4 @@
-IMAGENAME=registry.cn-beijing.aliyuncs.com/xitongzu/flow-ubuntu20.04-builder:latest
+IMAGENAME=registry.cn-beijing.aliyuncs.com/xitongzu/flow-ubuntu20.04-builder:master
 
 #docker run --rm -it -u $(id -u ${USER}):$(id -g ${USER}) -v $(pwd)/flow:/OpenROAD-flow-scripts/flow  -v /etc/passwd:/etc/passwd:ro -v /etc/group:/etc/group:ro ${IMAGENAME}
 

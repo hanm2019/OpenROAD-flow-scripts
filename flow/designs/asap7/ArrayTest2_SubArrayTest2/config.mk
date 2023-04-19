@@ -1,0 +1,16 @@
+export PLATFORM = asap7
+export DESIGN_NAME = SubArrayTest2
+export DESIGN_NICKNAME = ArrayTest2_SubArrayTest2
+export VERILOG_FILES = designs/src/ArrayTest2/SubArrayTest2.v
+export SDC_FILE = designs/asap7/ArrayTest2/constraint.sdc
+export IO_CONSTRAINTS = designs/asap7/ArrayTest2/SubArrayTest2/io.tcl
+BLOCKS = PETest
+export VERILOG_FILES_BLACKBOX = designs/src/ArrayTest2/PETest.v
+export MACRO_PLACEMENT_TCL = designs/asap7/ArrayTest2/SubArrayTest2/mp.tcl
+export GDS_ALLOW_EMPTY = PETest
+export MACRO_PLACE_HALO = 1 1
+export GPL_TIMING_DRIVEN = 0
+export GPL_ROUTABLILITY_DRIVEN = 0
+export DIE_AREA = 0 0 132 132
+export CORE_AREA = 12 12 120 120
+export PLACE_DENSITY = 0.5

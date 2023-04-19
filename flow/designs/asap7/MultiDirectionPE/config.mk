@@ -1,0 +1,9 @@
+export PLATFORM = asap7
+export DESIGN_NAME = MultiDirectionPE
+export DESIGN_NICKNAME = MultiDirectionPE
+export VERILOG_FILES = $(sort $(wildcard ./designs/src/$(DESIGN_NICKNAME)/*.v))
+export SDC_FILE = ./designs/$(PLATFORM)/$(DESIGN_NICKNAME)/constraint.sdc
+export IO_CONSTRAINTS = ./designs/$(PLATFORM)/$(DESIGN_NICKNAME)/io.tcl
+export DIE_AREA = 0 0 21 21
+export CORE_AREA = 0 0 21 21
+export PLACE_DENSITY = 0.9

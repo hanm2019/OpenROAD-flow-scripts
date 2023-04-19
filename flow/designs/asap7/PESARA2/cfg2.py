@@ -50,34 +50,6 @@ with open('config.mk', 'w') as f:
 
 
 
-# constraint.sdc
-
-clk_name = 'clk'
-clk_port_name = clk_name
-clk_period = round(1 / 0.7 * 1000)
-clk_io_pct = 0.2
-
-with open('constraint.sdc', 'w') as f:
-    def sdc_set(name, value):
-        f.write('set {} {}\n'.format(name, value))
-    
-    def sdc_line(cmd, s):
-        f.write('{} {}\n'.format(cmd, s))
-
-    sdc_line('current_design', '{}'.format(design_name))
-
-    sdc_set('clk_name', '{}'.format(clk_name))
-    sdc_set('clk_port_name', '{}'.format(clk_port_name))
-    sdc_set('clk_period', '{}'.format(clk_period))
-    sdc_set('clk_io_pct', '{}'.format(clk_io_pct))
-    
-    sdc_set('clk_port', r'[get_ports $clk_port_name]')
-    sdc_line('create_clock', r'-name $clk_name -period $clk_period  $clk_port')
-    sdc_set('non_clock_inputs', r'[lsearch -inline -all -not -exact [all_inputs] $clk_port]')
-    sdc_line('set_input_delay', r'[expr $clk_period * $clk_io_pct] -clock $clk_name $non_clock_inputs')
-    sdc_line('set_output_delay', r'[expr $clk_period * $clk_io_pct] -clock $clk_name [all_outputs]')
-
-
 
 # io.tcl
 
@@ -176,36 +148,48 @@ with open('io.tcl', 'w') as f:
     def mlist(l_list):
         return reduce(lambda x, y: x + y, l_list)
 
-    # data_boundry = 12
-    # away_from_corner = 0.2
-
-    # interval_data = (margin + away_from_corner, data_boundry - away_from_corner)
-    # evenly_place_pins(pin_left_data, 'left', interval_data, (1,))
-    # evenly_place_pins(pin_right_data, 'right', interval_data, (1,))
-    # evenly_place_pins(pin_top_data, 'top', interval_data, (1,))
-    # evenly_place_pins(pin_bottom_data, 'bottom', interval_data, (1,))
-
-    # interval_bypass = (data_boundry + away_from_corner, die - margin - away_from_corner)
-    # group_len = math.ceil(bypass / 3)
-    # for i in {0, 1, 2}:
-    #     evenly_place_pins(mlist(pin_left_bypass_list[i * group_len: (i + 1) * group_len]), 'left', interval_bypass, (i,))
-    #     evenly_place_pins(mlist(pin_right_bypass_list[i * group_len: (i + 1) * group_len]), 'right', interval_bypass, (i,))
-    #     evenly_place_pins(mlist(pin_top_bypass_list[i * group_len: (i + 1) * group_len]), 'top', interval_bypass, (i,))
-    #     evenly_place_pins(mlist(pin_bottom_bypass_list[i * group_len: (i + 1) * group_len]), 'bottom', interval_bypass, (i,))
-
     pin_left = [pin_left_data] + pin_left_bypass_list
     pin_right = [pin_right_data] + pin_right_bypass_list
     pin_top = [pin_top_data] + pin_top_bypass_list
     pin_bottom = [pin_bottom_data] + pin_bottom_bypass_list
     away_from_corner = 0.2
     interval = (margin + away_from_corner, die - margin - away_from_corner)
-    # interval = (margin + away_from_corner, 40 - margin - away_from_corner)
-    group_len = math.ceil(bypass / 3)
+    group_len = math.ceil((bypass + 1) / 3)
     for i in {0, 1, 2}:
         evenly_place_pins(mlist(pin_left[i * group_len: (i + 1) * group_len]), 'left', interval, (i,))
         evenly_place_pins(mlist(pin_right[i * group_len: (i + 1) * group_len]), 'right', interval, (i,))
         evenly_place_pins(mlist(pin_top[i * group_len: (i + 1) * group_len]), 'top', interval, (i,))
         evenly_place_pins(mlist(pin_bottom[i * group_len: (i + 1) * group_len]), 'bottom', interval, (i,))
+
+
+
+# constraint.sdc
+
+clk_name = 'clk'
+clk_port_name = clk_name
+clk_period = round(1 / 0.7 * 1000)
+clk_io_pct = 0.2
+
+with open('constraint.sdc', 'w') as f:
+    def sdc_set(name, value):
+        f.write('set {} {}\n'.format(name, value))
+    
+    def sdc_line(cmd, s):
+        f.write('{} {}\n'.format(cmd, s))
+
+    sdc_line('current_design', '{}'.format(design_name))
+
+    sdc_set('clk_name', '{}'.format(clk_name))
+    sdc_set('clk_port_name', '{}'.format(clk_port_name))
+    sdc_set('clk_period', '{}'.format(clk_period))
+    sdc_set('clk_io_pct', '{}'.format(clk_io_pct))
+    
+    sdc_set('clk_port', r'[get_ports $clk_port_name]')
+    sdc_line('create_clock', r'-name $clk_name -period $clk_period  $clk_port')
+    sdc_set('non_clock_inputs', r'[lsearch -inline -all -not -exact [all_inputs] $clk_port]')
+    sdc_line('set_input_delay', r'[expr $clk_period * $clk_io_pct] -clock $clk_name $non_clock_inputs')
+    sdc_line('set_output_delay', r'[expr $clk_period * $clk_io_pct] -clock $clk_name [all_outputs]')
+
 
 
 

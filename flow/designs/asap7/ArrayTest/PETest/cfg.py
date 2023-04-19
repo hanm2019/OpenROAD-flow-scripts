@@ -13,9 +13,9 @@ SRC_DIR = 'designs/src/{}'.format(PARENT_DESIGN_NAME)
 
 # config.mk
 
-DIE = 15
-DIE_MARGIN = 1
-PLACE_DENSITY = 0.8
+DIE = 12
+DIE_MARGIN = 0.48
+PLACE_DENSITY = 0.9
 
 with open(os.path.join(DESIGN_DIR, 'config.mk'), 'w') as f:
     def export(name, value):
@@ -26,7 +26,7 @@ with open(os.path.join(DESIGN_DIR, 'config.mk'), 'w') as f:
     export('DESIGN_NAME', '{}'.format(DESIGN_NAME))
     export('DESIGN_NICKNAME', '{}'.format(DESIGN_NICKNAME))
 
-    export('VERILOG_FILES', '{}/*.v'.format(SRC_DIR))
+    export('VERILOG_FILES', '{}/{}.v'.format(SRC_DIR, DESIGN_NAME))
     export('SDC_FILE', '{}/constraint.sdc'.format(PARENT_DESIGN_DIR))
     export('IO_CONSTRAINTS', '{}/io.tcl'.format(DESIGN_DIR))
 
@@ -36,14 +36,16 @@ with open(os.path.join(DESIGN_DIR, 'config.mk'), 'w') as f:
     export('PLACE_DENSITY', '{}'.format(PLACE_DENSITY))
 
     export('MACRO_PLACE_HALO', '1 1')    
+    export('GPL_TIMING_DRIVEN', '0')
+    export('GPL_ROUTABLILITY_DRIVEN', '0')
 
 
 WIDTH = 16
 
-PIN_INTERVAL_SIZE = 10
+PIN_INTERVAL_SIZE = DIE - 2 * DIE_MARGIN
 assert PIN_INTERVAL_SIZE < DIE
 interval = ((DIE - PIN_INTERVAL_SIZE) / 2, DIE - (DIE - PIN_INTERVAL_SIZE) / 2)
-print(interval)
+# print(interval)
 
 
 # io.tcl
@@ -64,7 +66,8 @@ with open(os.path.join(DESIGN_DIR, 'io.tcl'), 'w') as f:
         min_width = [0.018, 0.024, 0.032][layer]
         pin_size = '{' + str(min_width) + ' ' + str(min_width) + '}'
 
-        d_to_edge = min(0.5, 0.5 * DIE_MARGIN)
+        # d_to_edge = max(0.5, 0.5 * DIE_MARGIN)
+        d_to_edge = 0
         if edge == 'top':
             location = '{' + str(pos) + ' ' + str(DIE - d_to_edge) + '}'
         elif edge == 'bottom':
@@ -93,4 +96,5 @@ with open(os.path.join(DESIGN_DIR, 'io.tcl'), 'w') as f:
     evenly_place_pins(pin_right, 'right', interval=interval, layers=(1,))
     evenly_place_pins(pin_top, 'top', interval=interval, layers=(1,))
     evenly_place_pins(pin_bottom, 'bottom', interval=interval, layers=(1,))
-    place_pin('reset', 1, 'top', 0.1)
+    # place_pin('clk', 0, 'left', DIE / 2 - 0.5)
+    # place_pin('reset', 0, 'left', DIE / 2 + 0.5)

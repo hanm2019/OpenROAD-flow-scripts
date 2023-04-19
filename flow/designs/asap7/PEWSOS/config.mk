@@ -1,0 +1,9 @@
+export PLATFORM = asap7
+export DESIGN_NAME = PEWSOS
+export DESIGN_NICKNAME = PEWSOS
+export VERILOG_FILES = $(sort $(wildcard ./designs/src/$(DESIGN_NICKNAME)/*.v))
+export SDC_FILE = ./designs/$(PLATFORM)/$(DESIGN_NICKNAME)/constraint.sdc
+export IO_CONSTRAINTS = ./designs/$(PLATFORM)/$(DESIGN_NICKNAME)/io.tcl
+export DIE_AREA = 0 0 13.6 13.6
+export CORE_AREA = 0 0 13.6 13.6
+export PLACE_DENSITY = 0.9
