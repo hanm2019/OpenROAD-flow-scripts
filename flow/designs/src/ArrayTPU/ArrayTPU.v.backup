@@ -1,0 +1,379 @@
+// Generator : SpinalHDL v1.8.0    git head : 4e3563a282582b41f4eaafc503787757251d23ea
+// Component : ArrayTPU
+// Git hash  : 880d730121882c0a9e393151e88289ab6120d150
+
+`timescale 1ns/1ps
+
+module ArrayTPU (
+  input      [15:0]   io_in_r_0_data,
+  input               io_in_r_0_stop_weight,
+  input               io_in_r_0_stall,
+  input      [15:0]   io_in_r_1_data,
+  input               io_in_r_1_stop_weight,
+  input               io_in_r_1_stall,
+  input      [15:0]   io_in_r_2_data,
+  input               io_in_r_2_stop_weight,
+  input               io_in_r_2_stall,
+  input      [15:0]   io_in_r_3_data,
+  input               io_in_r_3_stop_weight,
+  input               io_in_r_3_stall,
+  output     [15:0]   io_out_r_0_data,
+  output              io_out_r_0_stop_weight,
+  output              io_out_r_0_stall,
+  output     [15:0]   io_out_r_1_data,
+  output              io_out_r_1_stop_weight,
+  output              io_out_r_1_stall,
+  output     [15:0]   io_out_r_2_data,
+  output              io_out_r_2_stop_weight,
+  output              io_out_r_2_stall,
+  output     [15:0]   io_out_r_3_data,
+  output              io_out_r_3_stop_weight,
+  output              io_out_r_3_stall,
+  input      [15:0]   io_in_c_0_data,
+  input               io_in_c_0_is_weight,
+  input      [15:0]   io_in_c_1_data,
+  input               io_in_c_1_is_weight,
+  input      [15:0]   io_in_c_2_data,
+  input               io_in_c_2_is_weight,
+  input      [15:0]   io_in_c_3_data,
+  input               io_in_c_3_is_weight,
+  output     [15:0]   io_out_c_0_data,
+  output              io_out_c_0_is_weight,
+  output     [15:0]   io_out_c_1_data,
+  output              io_out_c_1_is_weight,
+  output     [15:0]   io_out_c_2_data,
+  output              io_out_c_2_is_weight,
+  output     [15:0]   io_out_c_3_data,
+  output              io_out_c_3_is_weight,
+  input               clk,
+  input               reset
+);
+
+  wire       [15:0]   pe_mat_0_0_io_out_r_data;
+  wire                pe_mat_0_0_io_out_r_stop_weight;
+  wire                pe_mat_0_0_io_out_r_stall;
+  wire       [15:0]   pe_mat_0_0_io_out_c_data;
+  wire                pe_mat_0_0_io_out_c_is_weight;
+  wire       [15:0]   pe_mat_0_1_io_out_r_data;
+  wire                pe_mat_0_1_io_out_r_stop_weight;
+  wire                pe_mat_0_1_io_out_r_stall;
+  wire       [15:0]   pe_mat_0_1_io_out_c_data;
+  wire                pe_mat_0_1_io_out_c_is_weight;
+  wire       [15:0]   pe_mat_0_2_io_out_r_data;
+  wire                pe_mat_0_2_io_out_r_stop_weight;
+  wire                pe_mat_0_2_io_out_r_stall;
+  wire       [15:0]   pe_mat_0_2_io_out_c_data;
+  wire                pe_mat_0_2_io_out_c_is_weight;
+  wire       [15:0]   pe_mat_0_3_io_out_r_data;
+  wire                pe_mat_0_3_io_out_r_stop_weight;
+  wire                pe_mat_0_3_io_out_r_stall;
+  wire       [15:0]   pe_mat_0_3_io_out_c_data;
+  wire                pe_mat_0_3_io_out_c_is_weight;
+  wire       [15:0]   pe_mat_1_0_io_out_r_data;
+  wire                pe_mat_1_0_io_out_r_stop_weight;
+  wire                pe_mat_1_0_io_out_r_stall;
+  wire       [15:0]   pe_mat_1_0_io_out_c_data;
+  wire                pe_mat_1_0_io_out_c_is_weight;
+  wire       [15:0]   pe_mat_1_1_io_out_r_data;
+  wire                pe_mat_1_1_io_out_r_stop_weight;
+  wire                pe_mat_1_1_io_out_r_stall;
+  wire       [15:0]   pe_mat_1_1_io_out_c_data;
+  wire                pe_mat_1_1_io_out_c_is_weight;
+  wire       [15:0]   pe_mat_1_2_io_out_r_data;
+  wire                pe_mat_1_2_io_out_r_stop_weight;
+  wire                pe_mat_1_2_io_out_r_stall;
+  wire       [15:0]   pe_mat_1_2_io_out_c_data;
+  wire                pe_mat_1_2_io_out_c_is_weight;
+  wire       [15:0]   pe_mat_1_3_io_out_r_data;
+  wire                pe_mat_1_3_io_out_r_stop_weight;
+  wire                pe_mat_1_3_io_out_r_stall;
+  wire       [15:0]   pe_mat_1_3_io_out_c_data;
+  wire                pe_mat_1_3_io_out_c_is_weight;
+  wire       [15:0]   pe_mat_2_0_io_out_r_data;
+  wire                pe_mat_2_0_io_out_r_stop_weight;
+  wire                pe_mat_2_0_io_out_r_stall;
+  wire       [15:0]   pe_mat_2_0_io_out_c_data;
+  wire                pe_mat_2_0_io_out_c_is_weight;
+  wire       [15:0]   pe_mat_2_1_io_out_r_data;
+  wire                pe_mat_2_1_io_out_r_stop_weight;
+  wire                pe_mat_2_1_io_out_r_stall;
+  wire       [15:0]   pe_mat_2_1_io_out_c_data;
+  wire                pe_mat_2_1_io_out_c_is_weight;
+  wire       [15:0]   pe_mat_2_2_io_out_r_data;
+  wire                pe_mat_2_2_io_out_r_stop_weight;
+  wire                pe_mat_2_2_io_out_r_stall;
+  wire       [15:0]   pe_mat_2_2_io_out_c_data;
+  wire                pe_mat_2_2_io_out_c_is_weight;
+  wire       [15:0]   pe_mat_2_3_io_out_r_data;
+  wire                pe_mat_2_3_io_out_r_stop_weight;
+  wire                pe_mat_2_3_io_out_r_stall;
+  wire       [15:0]   pe_mat_2_3_io_out_c_data;
+  wire                pe_mat_2_3_io_out_c_is_weight;
+  wire       [15:0]   pe_mat_3_0_io_out_r_data;
+  wire                pe_mat_3_0_io_out_r_stop_weight;
+  wire                pe_mat_3_0_io_out_r_stall;
+  wire       [15:0]   pe_mat_3_0_io_out_c_data;
+  wire                pe_mat_3_0_io_out_c_is_weight;
+  wire       [15:0]   pe_mat_3_1_io_out_r_data;
+  wire                pe_mat_3_1_io_out_r_stop_weight;
+  wire                pe_mat_3_1_io_out_r_stall;
+  wire       [15:0]   pe_mat_3_1_io_out_c_data;
+  wire                pe_mat_3_1_io_out_c_is_weight;
+  wire       [15:0]   pe_mat_3_2_io_out_r_data;
+  wire                pe_mat_3_2_io_out_r_stop_weight;
+  wire                pe_mat_3_2_io_out_r_stall;
+  wire       [15:0]   pe_mat_3_2_io_out_c_data;
+  wire                pe_mat_3_2_io_out_c_is_weight;
+  wire       [15:0]   pe_mat_3_3_io_out_r_data;
+  wire                pe_mat_3_3_io_out_r_stop_weight;
+  wire                pe_mat_3_3_io_out_r_stall;
+  wire       [15:0]   pe_mat_3_3_io_out_c_data;
+  wire                pe_mat_3_3_io_out_c_is_weight;
+
+  PEWS pe_mat_0_0 (
+    .io_in_r_data         (io_in_r_0_data[15:0]           ), //i
+    .io_in_r_stop_weight  (io_in_r_0_stop_weight          ), //i
+    .io_in_r_stall        (io_in_r_0_stall                ), //i
+    .io_out_r_data        (pe_mat_0_0_io_out_r_data[15:0] ), //o
+    .io_out_r_stop_weight (pe_mat_0_0_io_out_r_stop_weight), //o
+    .io_out_r_stall       (pe_mat_0_0_io_out_r_stall      ), //o
+    .io_in_c_data         (io_in_c_0_data[15:0]           ), //i
+    .io_in_c_is_weight    (io_in_c_0_is_weight            ), //i
+    .io_out_c_data        (pe_mat_0_0_io_out_c_data[15:0] ), //o
+    .io_out_c_is_weight   (pe_mat_0_0_io_out_c_is_weight  ), //o
+    .clk                  (clk                            ), //i
+    .reset                (reset                          )  //i
+  );
+  PEWS pe_mat_0_1 (
+    .io_in_r_data         (pe_mat_0_0_io_out_r_data[15:0] ), //i
+    .io_in_r_stop_weight  (pe_mat_0_0_io_out_r_stop_weight), //i
+    .io_in_r_stall        (pe_mat_0_0_io_out_r_stall      ), //i
+    .io_out_r_data        (pe_mat_0_1_io_out_r_data[15:0] ), //o
+    .io_out_r_stop_weight (pe_mat_0_1_io_out_r_stop_weight), //o
+    .io_out_r_stall       (pe_mat_0_1_io_out_r_stall      ), //o
+    .io_in_c_data         (io_in_c_1_data[15:0]           ), //i
+    .io_in_c_is_weight    (io_in_c_1_is_weight            ), //i
+    .io_out_c_data        (pe_mat_0_1_io_out_c_data[15:0] ), //o
+    .io_out_c_is_weight   (pe_mat_0_1_io_out_c_is_weight  ), //o
+    .clk                  (clk                            ), //i
+    .reset                (reset                          )  //i
+  );
+  PEWS pe_mat_0_2 (
+    .io_in_r_data         (pe_mat_0_1_io_out_r_data[15:0] ), //i
+    .io_in_r_stop_weight  (pe_mat_0_1_io_out_r_stop_weight), //i
+    .io_in_r_stall        (pe_mat_0_1_io_out_r_stall      ), //i
+    .io_out_r_data        (pe_mat_0_2_io_out_r_data[15:0] ), //o
+    .io_out_r_stop_weight (pe_mat_0_2_io_out_r_stop_weight), //o
+    .io_out_r_stall       (pe_mat_0_2_io_out_r_stall      ), //o
+    .io_in_c_data         (io_in_c_2_data[15:0]           ), //i
+    .io_in_c_is_weight    (io_in_c_2_is_weight            ), //i
+    .io_out_c_data        (pe_mat_0_2_io_out_c_data[15:0] ), //o
+    .io_out_c_is_weight   (pe_mat_0_2_io_out_c_is_weight  ), //o
+    .clk                  (clk                            ), //i
+    .reset                (reset                          )  //i
+  );
+  PEWS pe_mat_0_3 (
+    .io_in_r_data         (pe_mat_0_2_io_out_r_data[15:0] ), //i
+    .io_in_r_stop_weight  (pe_mat_0_2_io_out_r_stop_weight), //i
+    .io_in_r_stall        (pe_mat_0_2_io_out_r_stall      ), //i
+    .io_out_r_data        (pe_mat_0_3_io_out_r_data[15:0] ), //o
+    .io_out_r_stop_weight (pe_mat_0_3_io_out_r_stop_weight), //o
+    .io_out_r_stall       (pe_mat_0_3_io_out_r_stall      ), //o
+    .io_in_c_data         (io_in_c_3_data[15:0]           ), //i
+    .io_in_c_is_weight    (io_in_c_3_is_weight            ), //i
+    .io_out_c_data        (pe_mat_0_3_io_out_c_data[15:0] ), //o
+    .io_out_c_is_weight   (pe_mat_0_3_io_out_c_is_weight  ), //o
+    .clk                  (clk                            ), //i
+    .reset                (reset                          )  //i
+  );
+  PEWS pe_mat_1_0 (
+    .io_in_r_data         (io_in_r_1_data[15:0]           ), //i
+    .io_in_r_stop_weight  (io_in_r_1_stop_weight          ), //i
+    .io_in_r_stall        (io_in_r_1_stall                ), //i
+    .io_out_r_data        (pe_mat_1_0_io_out_r_data[15:0] ), //o
+    .io_out_r_stop_weight (pe_mat_1_0_io_out_r_stop_weight), //o
+    .io_out_r_stall       (pe_mat_1_0_io_out_r_stall      ), //o
+    .io_in_c_data         (pe_mat_0_0_io_out_c_data[15:0] ), //i
+    .io_in_c_is_weight    (pe_mat_0_0_io_out_c_is_weight  ), //i
+    .io_out_c_data        (pe_mat_1_0_io_out_c_data[15:0] ), //o
+    .io_out_c_is_weight   (pe_mat_1_0_io_out_c_is_weight  ), //o
+    .clk                  (clk                            ), //i
+    .reset                (reset                          )  //i
+  );
+  PEWS pe_mat_1_1 (
+    .io_in_r_data         (pe_mat_1_0_io_out_r_data[15:0] ), //i
+    .io_in_r_stop_weight  (pe_mat_1_0_io_out_r_stop_weight), //i
+    .io_in_r_stall        (pe_mat_1_0_io_out_r_stall      ), //i
+    .io_out_r_data        (pe_mat_1_1_io_out_r_data[15:0] ), //o
+    .io_out_r_stop_weight (pe_mat_1_1_io_out_r_stop_weight), //o
+    .io_out_r_stall       (pe_mat_1_1_io_out_r_stall      ), //o
+    .io_in_c_data         (pe_mat_0_1_io_out_c_data[15:0] ), //i
+    .io_in_c_is_weight    (pe_mat_0_1_io_out_c_is_weight  ), //i
+    .io_out_c_data        (pe_mat_1_1_io_out_c_data[15:0] ), //o
+    .io_out_c_is_weight   (pe_mat_1_1_io_out_c_is_weight  ), //o
+    .clk                  (clk                            ), //i
+    .reset                (reset                          )  //i
+  );
+  PEWS pe_mat_1_2 (
+    .io_in_r_data         (pe_mat_1_1_io_out_r_data[15:0] ), //i
+    .io_in_r_stop_weight  (pe_mat_1_1_io_out_r_stop_weight), //i
+    .io_in_r_stall        (pe_mat_1_1_io_out_r_stall      ), //i
+    .io_out_r_data        (pe_mat_1_2_io_out_r_data[15:0] ), //o
+    .io_out_r_stop_weight (pe_mat_1_2_io_out_r_stop_weight), //o
+    .io_out_r_stall       (pe_mat_1_2_io_out_r_stall      ), //o
+    .io_in_c_data         (pe_mat_0_2_io_out_c_data[15:0] ), //i
+    .io_in_c_is_weight    (pe_mat_0_2_io_out_c_is_weight  ), //i
+    .io_out_c_data        (pe_mat_1_2_io_out_c_data[15:0] ), //o
+    .io_out_c_is_weight   (pe_mat_1_2_io_out_c_is_weight  ), //o
+    .clk                  (clk                            ), //i
+    .reset                (reset                          )  //i
+  );
+  PEWS pe_mat_1_3 (
+    .io_in_r_data         (pe_mat_1_2_io_out_r_data[15:0] ), //i
+    .io_in_r_stop_weight  (pe_mat_1_2_io_out_r_stop_weight), //i
+    .io_in_r_stall        (pe_mat_1_2_io_out_r_stall      ), //i
+    .io_out_r_data        (pe_mat_1_3_io_out_r_data[15:0] ), //o
+    .io_out_r_stop_weight (pe_mat_1_3_io_out_r_stop_weight), //o
+    .io_out_r_stall       (pe_mat_1_3_io_out_r_stall      ), //o
+    .io_in_c_data         (pe_mat_0_3_io_out_c_data[15:0] ), //i
+    .io_in_c_is_weight    (pe_mat_0_3_io_out_c_is_weight  ), //i
+    .io_out_c_data        (pe_mat_1_3_io_out_c_data[15:0] ), //o
+    .io_out_c_is_weight   (pe_mat_1_3_io_out_c_is_weight  ), //o
+    .clk                  (clk                            ), //i
+    .reset                (reset                          )  //i
+  );
+  PEWS pe_mat_2_0 (
+    .io_in_r_data         (io_in_r_2_data[15:0]           ), //i
+    .io_in_r_stop_weight  (io_in_r_2_stop_weight          ), //i
+    .io_in_r_stall        (io_in_r_2_stall                ), //i
+    .io_out_r_data        (pe_mat_2_0_io_out_r_data[15:0] ), //o
+    .io_out_r_stop_weight (pe_mat_2_0_io_out_r_stop_weight), //o
+    .io_out_r_stall       (pe_mat_2_0_io_out_r_stall      ), //o
+    .io_in_c_data         (pe_mat_1_0_io_out_c_data[15:0] ), //i
+    .io_in_c_is_weight    (pe_mat_1_0_io_out_c_is_weight  ), //i
+    .io_out_c_data        (pe_mat_2_0_io_out_c_data[15:0] ), //o
+    .io_out_c_is_weight   (pe_mat_2_0_io_out_c_is_weight  ), //o
+    .clk                  (clk                            ), //i
+    .reset                (reset                          )  //i
+  );
+  PEWS pe_mat_2_1 (
+    .io_in_r_data         (pe_mat_2_0_io_out_r_data[15:0] ), //i
+    .io_in_r_stop_weight  (pe_mat_2_0_io_out_r_stop_weight), //i
+    .io_in_r_stall        (pe_mat_2_0_io_out_r_stall      ), //i
+    .io_out_r_data        (pe_mat_2_1_io_out_r_data[15:0] ), //o
+    .io_out_r_stop_weight (pe_mat_2_1_io_out_r_stop_weight), //o
+    .io_out_r_stall       (pe_mat_2_1_io_out_r_stall      ), //o
+    .io_in_c_data         (pe_mat_1_1_io_out_c_data[15:0] ), //i
+    .io_in_c_is_weight    (pe_mat_1_1_io_out_c_is_weight  ), //i
+    .io_out_c_data        (pe_mat_2_1_io_out_c_data[15:0] ), //o
+    .io_out_c_is_weight   (pe_mat_2_1_io_out_c_is_weight  ), //o
+    .clk                  (clk                            ), //i
+    .reset                (reset                          )  //i
+  );
+  PEWS pe_mat_2_2 (
+    .io_in_r_data         (pe_mat_2_1_io_out_r_data[15:0] ), //i
+    .io_in_r_stop_weight  (pe_mat_2_1_io_out_r_stop_weight), //i
+    .io_in_r_stall        (pe_mat_2_1_io_out_r_stall      ), //i
+    .io_out_r_data        (pe_mat_2_2_io_out_r_data[15:0] ), //o
+    .io_out_r_stop_weight (pe_mat_2_2_io_out_r_stop_weight), //o
+    .io_out_r_stall       (pe_mat_2_2_io_out_r_stall      ), //o
+    .io_in_c_data         (pe_mat_1_2_io_out_c_data[15:0] ), //i
+    .io_in_c_is_weight    (pe_mat_1_2_io_out_c_is_weight  ), //i
+    .io_out_c_data        (pe_mat_2_2_io_out_c_data[15:0] ), //o
+    .io_out_c_is_weight   (pe_mat_2_2_io_out_c_is_weight  ), //o
+    .clk                  (clk                            ), //i
+    .reset                (reset                          )  //i
+  );
+  PEWS pe_mat_2_3 (
+    .io_in_r_data         (pe_mat_2_2_io_out_r_data[15:0] ), //i
+    .io_in_r_stop_weight  (pe_mat_2_2_io_out_r_stop_weight), //i
+    .io_in_r_stall        (pe_mat_2_2_io_out_r_stall      ), //i
+    .io_out_r_data        (pe_mat_2_3_io_out_r_data[15:0] ), //o
+    .io_out_r_stop_weight (pe_mat_2_3_io_out_r_stop_weight), //o
+    .io_out_r_stall       (pe_mat_2_3_io_out_r_stall      ), //o
+    .io_in_c_data         (pe_mat_1_3_io_out_c_data[15:0] ), //i
+    .io_in_c_is_weight    (pe_mat_1_3_io_out_c_is_weight  ), //i
+    .io_out_c_data        (pe_mat_2_3_io_out_c_data[15:0] ), //o
+    .io_out_c_is_weight   (pe_mat_2_3_io_out_c_is_weight  ), //o
+    .clk                  (clk                            ), //i
+    .reset                (reset                          )  //i
+  );
+  PEWS pe_mat_3_0 (
+    .io_in_r_data         (io_in_r_3_data[15:0]           ), //i
+    .io_in_r_stop_weight  (io_in_r_3_stop_weight          ), //i
+    .io_in_r_stall        (io_in_r_3_stall                ), //i
+    .io_out_r_data        (pe_mat_3_0_io_out_r_data[15:0] ), //o
+    .io_out_r_stop_weight (pe_mat_3_0_io_out_r_stop_weight), //o
+    .io_out_r_stall       (pe_mat_3_0_io_out_r_stall      ), //o
+    .io_in_c_data         (pe_mat_2_0_io_out_c_data[15:0] ), //i
+    .io_in_c_is_weight    (pe_mat_2_0_io_out_c_is_weight  ), //i
+    .io_out_c_data        (pe_mat_3_0_io_out_c_data[15:0] ), //o
+    .io_out_c_is_weight   (pe_mat_3_0_io_out_c_is_weight  ), //o
+    .clk                  (clk                            ), //i
+    .reset                (reset                          )  //i
+  );
+  PEWS pe_mat_3_1 (
+    .io_in_r_data         (pe_mat_3_0_io_out_r_data[15:0] ), //i
+    .io_in_r_stop_weight  (pe_mat_3_0_io_out_r_stop_weight), //i
+    .io_in_r_stall        (pe_mat_3_0_io_out_r_stall      ), //i
+    .io_out_r_data        (pe_mat_3_1_io_out_r_data[15:0] ), //o
+    .io_out_r_stop_weight (pe_mat_3_1_io_out_r_stop_weight), //o
+    .io_out_r_stall       (pe_mat_3_1_io_out_r_stall      ), //o
+    .io_in_c_data         (pe_mat_2_1_io_out_c_data[15:0] ), //i
+    .io_in_c_is_weight    (pe_mat_2_1_io_out_c_is_weight  ), //i
+    .io_out_c_data        (pe_mat_3_1_io_out_c_data[15:0] ), //o
+    .io_out_c_is_weight   (pe_mat_3_1_io_out_c_is_weight  ), //o
+    .clk                  (clk                            ), //i
+    .reset                (reset                          )  //i
+  );
+  PEWS pe_mat_3_2 (
+    .io_in_r_data         (pe_mat_3_1_io_out_r_data[15:0] ), //i
+    .io_in_r_stop_weight  (pe_mat_3_1_io_out_r_stop_weight), //i
+    .io_in_r_stall        (pe_mat_3_1_io_out_r_stall      ), //i
+    .io_out_r_data        (pe_mat_3_2_io_out_r_data[15:0] ), //o
+    .io_out_r_stop_weight (pe_mat_3_2_io_out_r_stop_weight), //o
+    .io_out_r_stall       (pe_mat_3_2_io_out_r_stall      ), //o
+    .io_in_c_data         (pe_mat_2_2_io_out_c_data[15:0] ), //i
+    .io_in_c_is_weight    (pe_mat_2_2_io_out_c_is_weight  ), //i
+    .io_out_c_data        (pe_mat_3_2_io_out_c_data[15:0] ), //o
+    .io_out_c_is_weight   (pe_mat_3_2_io_out_c_is_weight  ), //o
+    .clk                  (clk                            ), //i
+    .reset                (reset                          )  //i
+  );
+  PEWS pe_mat_3_3 (
+    .io_in_r_data         (pe_mat_3_2_io_out_r_data[15:0] ), //i
+    .io_in_r_stop_weight  (pe_mat_3_2_io_out_r_stop_weight), //i
+    .io_in_r_stall        (pe_mat_3_2_io_out_r_stall      ), //i
+    .io_out_r_data        (pe_mat_3_3_io_out_r_data[15:0] ), //o
+    .io_out_r_stop_weight (pe_mat_3_3_io_out_r_stop_weight), //o
+    .io_out_r_stall       (pe_mat_3_3_io_out_r_stall      ), //o
+    .io_in_c_data         (pe_mat_2_3_io_out_c_data[15:0] ), //i
+    .io_in_c_is_weight    (pe_mat_2_3_io_out_c_is_weight  ), //i
+    .io_out_c_data        (pe_mat_3_3_io_out_c_data[15:0] ), //o
+    .io_out_c_is_weight   (pe_mat_3_3_io_out_c_is_weight  ), //o
+    .clk                  (clk                            ), //i
+    .reset                (reset                          )  //i
+  );
+  assign io_out_r_0_data = pe_mat_0_3_io_out_r_data; // @[SystolicConnect.scala 50:16]
+  assign io_out_r_0_stop_weight = pe_mat_0_3_io_out_r_stop_weight; // @[SystolicConnect.scala 50:16]
+  assign io_out_r_0_stall = pe_mat_0_3_io_out_r_stall; // @[SystolicConnect.scala 50:16]
+  assign io_out_r_1_data = pe_mat_1_3_io_out_r_data; // @[SystolicConnect.scala 50:16]
+  assign io_out_r_1_stop_weight = pe_mat_1_3_io_out_r_stop_weight; // @[SystolicConnect.scala 50:16]
+  assign io_out_r_1_stall = pe_mat_1_3_io_out_r_stall; // @[SystolicConnect.scala 50:16]
+  assign io_out_r_2_data = pe_mat_2_3_io_out_r_data; // @[SystolicConnect.scala 50:16]
+  assign io_out_r_2_stop_weight = pe_mat_2_3_io_out_r_stop_weight; // @[SystolicConnect.scala 50:16]
+  assign io_out_r_2_stall = pe_mat_2_3_io_out_r_stall; // @[SystolicConnect.scala 50:16]
+  assign io_out_r_3_data = pe_mat_3_3_io_out_r_data; // @[SystolicConnect.scala 50:16]
+  assign io_out_r_3_stop_weight = pe_mat_3_3_io_out_r_stop_weight; // @[SystolicConnect.scala 50:16]
+  assign io_out_r_3_stall = pe_mat_3_3_io_out_r_stall; // @[SystolicConnect.scala 50:16]
+  assign io_out_c_0_data = pe_mat_3_0_io_out_c_data; // @[SystolicConnect.scala 56:16]
+  assign io_out_c_0_is_weight = pe_mat_3_0_io_out_c_is_weight; // @[SystolicConnect.scala 56:16]
+  assign io_out_c_1_data = pe_mat_3_1_io_out_c_data; // @[SystolicConnect.scala 56:16]
+  assign io_out_c_1_is_weight = pe_mat_3_1_io_out_c_is_weight; // @[SystolicConnect.scala 56:16]
+  assign io_out_c_2_data = pe_mat_3_2_io_out_c_data; // @[SystolicConnect.scala 56:16]
+  assign io_out_c_2_is_weight = pe_mat_3_2_io_out_c_is_weight; // @[SystolicConnect.scala 56:16]
+  assign io_out_c_3_data = pe_mat_3_3_io_out_c_data; // @[SystolicConnect.scala 56:16]
+  assign io_out_c_3_is_weight = pe_mat_3_3_io_out_c_is_weight; // @[SystolicConnect.scala 56:16]
+
+endmodule
+

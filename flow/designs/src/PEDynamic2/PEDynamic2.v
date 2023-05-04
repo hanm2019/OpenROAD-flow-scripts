@@ -32,30 +32,6 @@ module PEDynamic2 (
   input      [15:0]   io_left_bypass_7_data,
   input               io_left_bypass_7_start_output,
   input               io_left_bypass_7_stall,
-  input      [15:0]   io_left_bypass_8_data,
-  input               io_left_bypass_8_start_output,
-  input               io_left_bypass_8_stall,
-  input      [15:0]   io_left_bypass_9_data,
-  input               io_left_bypass_9_start_output,
-  input               io_left_bypass_9_stall,
-  input      [15:0]   io_left_bypass_10_data,
-  input               io_left_bypass_10_start_output,
-  input               io_left_bypass_10_stall,
-  input      [15:0]   io_left_bypass_11_data,
-  input               io_left_bypass_11_start_output,
-  input               io_left_bypass_11_stall,
-  input      [15:0]   io_left_bypass_12_data,
-  input               io_left_bypass_12_start_output,
-  input               io_left_bypass_12_stall,
-  input      [15:0]   io_left_bypass_13_data,
-  input               io_left_bypass_13_start_output,
-  input               io_left_bypass_13_stall,
-  input      [15:0]   io_left_bypass_14_data,
-  input               io_left_bypass_14_start_output,
-  input               io_left_bypass_14_stall,
-  input      [15:0]   io_left_bypass_15_data,
-  input               io_left_bypass_15_start_output,
-  input               io_left_bypass_15_stall,
   output     [15:0]   io_right_data_data,
   output              io_right_data_start_output,
   output              io_right_data_stall,
@@ -83,30 +59,6 @@ module PEDynamic2 (
   output     [15:0]   io_right_bypass_7_data,
   output              io_right_bypass_7_start_output,
   output              io_right_bypass_7_stall,
-  output     [15:0]   io_right_bypass_8_data,
-  output              io_right_bypass_8_start_output,
-  output              io_right_bypass_8_stall,
-  output     [15:0]   io_right_bypass_9_data,
-  output              io_right_bypass_9_start_output,
-  output              io_right_bypass_9_stall,
-  output     [15:0]   io_right_bypass_10_data,
-  output              io_right_bypass_10_start_output,
-  output              io_right_bypass_10_stall,
-  output     [15:0]   io_right_bypass_11_data,
-  output              io_right_bypass_11_start_output,
-  output              io_right_bypass_11_stall,
-  output     [15:0]   io_right_bypass_12_data,
-  output              io_right_bypass_12_start_output,
-  output              io_right_bypass_12_stall,
-  output     [15:0]   io_right_bypass_13_data,
-  output              io_right_bypass_13_start_output,
-  output              io_right_bypass_13_stall,
-  output     [15:0]   io_right_bypass_14_data,
-  output              io_right_bypass_14_start_output,
-  output              io_right_bypass_14_stall,
-  output     [15:0]   io_right_bypass_15_data,
-  output              io_right_bypass_15_start_output,
-  output              io_right_bypass_15_stall,
   input      [15:0]   io_top_data_data,
   output     [15:0]   io_top_bypass_data,
   output     [15:0]   io_bottom_data_data,
@@ -160,30 +112,6 @@ module PEDynamic2 (
   assign io_right_bypass_7_data = io_left_bypass_7_data; // @[ArrayDynamic2.scala 38:19]
   assign io_right_bypass_7_start_output = io_left_bypass_7_start_output; // @[ArrayDynamic2.scala 38:19]
   assign io_right_bypass_7_stall = io_left_bypass_7_stall; // @[ArrayDynamic2.scala 38:19]
-  assign io_right_bypass_8_data = io_left_bypass_8_data; // @[ArrayDynamic2.scala 38:19]
-  assign io_right_bypass_8_start_output = io_left_bypass_8_start_output; // @[ArrayDynamic2.scala 38:19]
-  assign io_right_bypass_8_stall = io_left_bypass_8_stall; // @[ArrayDynamic2.scala 38:19]
-  assign io_right_bypass_9_data = io_left_bypass_9_data; // @[ArrayDynamic2.scala 38:19]
-  assign io_right_bypass_9_start_output = io_left_bypass_9_start_output; // @[ArrayDynamic2.scala 38:19]
-  assign io_right_bypass_9_stall = io_left_bypass_9_stall; // @[ArrayDynamic2.scala 38:19]
-  assign io_right_bypass_10_data = io_left_bypass_10_data; // @[ArrayDynamic2.scala 38:19]
-  assign io_right_bypass_10_start_output = io_left_bypass_10_start_output; // @[ArrayDynamic2.scala 38:19]
-  assign io_right_bypass_10_stall = io_left_bypass_10_stall; // @[ArrayDynamic2.scala 38:19]
-  assign io_right_bypass_11_data = io_left_bypass_11_data; // @[ArrayDynamic2.scala 38:19]
-  assign io_right_bypass_11_start_output = io_left_bypass_11_start_output; // @[ArrayDynamic2.scala 38:19]
-  assign io_right_bypass_11_stall = io_left_bypass_11_stall; // @[ArrayDynamic2.scala 38:19]
-  assign io_right_bypass_12_data = io_left_bypass_12_data; // @[ArrayDynamic2.scala 38:19]
-  assign io_right_bypass_12_start_output = io_left_bypass_12_start_output; // @[ArrayDynamic2.scala 38:19]
-  assign io_right_bypass_12_stall = io_left_bypass_12_stall; // @[ArrayDynamic2.scala 38:19]
-  assign io_right_bypass_13_data = io_left_bypass_13_data; // @[ArrayDynamic2.scala 38:19]
-  assign io_right_bypass_13_start_output = io_left_bypass_13_start_output; // @[ArrayDynamic2.scala 38:19]
-  assign io_right_bypass_13_stall = io_left_bypass_13_stall; // @[ArrayDynamic2.scala 38:19]
-  assign io_right_bypass_14_data = io_left_bypass_14_data; // @[ArrayDynamic2.scala 38:19]
-  assign io_right_bypass_14_start_output = io_left_bypass_14_start_output; // @[ArrayDynamic2.scala 38:19]
-  assign io_right_bypass_14_stall = io_left_bypass_14_stall; // @[ArrayDynamic2.scala 38:19]
-  assign io_right_bypass_15_data = io_left_bypass_15_data; // @[ArrayDynamic2.scala 38:19]
-  assign io_right_bypass_15_start_output = io_left_bypass_15_start_output; // @[ArrayDynamic2.scala 38:19]
-  assign io_right_bypass_15_stall = io_left_bypass_15_stall; // @[ArrayDynamic2.scala 38:19]
   assign io_top_bypass_data = io_bottom_bypass_data; // @[ArrayDynamic2.scala 39:17]
 
 endmodule

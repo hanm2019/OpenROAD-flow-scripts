@@ -7,14 +7,17 @@ PLATFORM = 'asap7'
 DESIGN_NAME = 'PEWS'
 os.chdir("./designs/{}/{}".format(PLATFORM, DESIGN_NAME))
 
-DIE = 13.7
+DIE = 14
 DIE_MARGIN = 0
 
-PLACE_DENSITY = 0.8
+PLACE_DENSITY = 0.9
 
 with open('config.mk', 'w') as f:
-    def export(name, value):
-        f.write('export {} = {}\n'.format(name, value))
+    def export(name, value=None):
+        if value is None:
+            f.write('export {}\n'.format(name))
+        else:
+            f.write('export {} = {}\n'.format(name, value))
     
     export('PLATFORM', '{}'.format(PLATFORM))
 
@@ -35,6 +38,11 @@ with open('config.mk', 'w') as f:
     
     export('PLACE_DENSITY', '{}'.format(PLACE_DENSITY))
 
+    export('SYNTH_HIERARCHICAL', 'true')
+    export('HAS_IO_CONSTRAINTS', 'true')
+    export('ENABLE_DP0', 'true')
+    export('GPL_ROUTABILITY_DRIVEN', 'true')
+    export('ABC_AREA', 'true')
 
 
 

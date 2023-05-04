@@ -7,7 +7,7 @@ PLATFORM = 'asap7'
 DESIGN_NAME = 'PEPlanaria'
 os.chdir("./designs/{}/{}".format(PLATFORM, DESIGN_NAME))
 
-DIE = 13.7
+DIE = 14
 DIE_MARGIN = 0
 
 PLACE_DENSITY = 0.9
@@ -34,6 +34,12 @@ with open('config.mk', 'w') as f:
     export('CORE_AREA', '{} {} {} {}'.format(DIE_MARGIN, DIE_MARGIN, DIE - DIE_MARGIN, DIE - DIE_MARGIN))
     
     export('PLACE_DENSITY', '{}'.format(PLACE_DENSITY))
+
+    export('SYNTH_HIERARCHICAL', 'true')
+    export('HAS_IO_CONSTRAINTS', 'true')
+    export('ENABLE_DP0', 'true')
+    export('GPL_ROUTABILITY_DRIVEN', 'true')
+    export('ABC_AREA', 'true')
 
 
 

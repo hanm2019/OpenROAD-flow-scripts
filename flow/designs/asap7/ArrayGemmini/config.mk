@@ -1,10 +1,16 @@
-export PLATFORM               = asap7
-
-export DESIGN_NAME            = ArrayGemmini
-
-export VERILOG_FILES          = $(sort $(wildcard ./designs/src/$(DESIGN_NICKNAME)/*.v))
-export SDC_FILE               = ./designs/$(PLATFORM)/$(DESIGN_NICKNAME)/constraint.sdc
-
-export DIE_AREA               = 0 0 220 220
-export CORE_AREA              = 10 10 210 210
-export PLACE_DENSITY          = 0.35
+export PLATFORM = asap7
+export DESIGN_NAME = ArrayGemmini
+export DESIGN_NICKNAME = ArrayGemmini
+export VERILOG_FILES = designs/src/ArrayGemmini/ArrayGemmini_32x32.v
+export SDC_FILE = designs/asap7/ArrayGemmini/constraint.sdc
+export IO_CONSTRAINTS = designs/asap7/ArrayGemmini/io.tcl
+export DIE_AREA = 0 0 1164 1164
+export CORE_AREA = 0 0 1164 1164
+export PLACE_DENSITY = 0.3
+export MACRO_PLACE_HALO = 1 1
+export GPL_TIMING_DRIVEN = 0
+export GPL_ROUTABLILITY_DRIVEN = 1
+export SYNTH_HIERARCHICAL = 1
+export HAS_IO_CONSTRAINTS = 1
+export ENABLE_DP0 = 1
+export ABC_AREA = 1

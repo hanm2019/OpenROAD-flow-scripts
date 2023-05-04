@@ -8,11 +8,11 @@ PLATFORM = 'asap7'
 DESIGN_NAME = 'PEDynamic2'
 os.chdir("./designs/{}/{}".format(PLATFORM, DESIGN_NAME))
 
-DIE_X = 12
+DIE_X = 14
 DIE_Y = 30
 DIE_MARGIN = 0
 
-PLACE_DENSITY = 0.8
+PLACE_DENSITY = 0.9
 
 with open('config.mk', 'w') as f:
     def export(name, value):
@@ -37,13 +37,19 @@ with open('config.mk', 'w') as f:
     
     export('PLACE_DENSITY', '{}'.format(PLACE_DENSITY))
 
+    export('SYNTH_HIERARCHICAL', 'true')
+    export('HAS_IO_CONSTRAINTS', 'true')
+    export('ENABLE_DP0', 'true')
+    export('GPL_ROUTABILITY_DRIVEN', 'true')
+    export('ABC_AREA', 'true')
+
 
 
 
 # io.tcl
 
 DATA_WIDTH = 16
-N_BYPASS = 16
+N_BYPASS = 8
 
 def create_pin_row(edge):
     pin_data = ['io_{}_data_start_output'.format(edge), 'io_{}_data_stall'.format(edge)] + \

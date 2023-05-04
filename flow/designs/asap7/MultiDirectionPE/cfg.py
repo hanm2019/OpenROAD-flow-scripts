@@ -31,6 +31,12 @@ with open('config.mk', 'w') as f:
     
     export('PLACE_DENSITY', '{}'.format(PLACE_DENSITY))
 
+    export('SYNTH_HIERARCHICAL', 'true')
+    export('HAS_IO_CONSTRAINTS', 'true')
+    export('ENABLE_DP0', 'true')
+    export('GPL_ROUTABILITY_DRIVEN', 'true')
+    export('ABC_AREA', 'true')
+
 
 
 # io.tcl

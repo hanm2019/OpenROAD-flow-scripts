@@ -12,8 +12,8 @@ core_utilization = 2
 core_aspect_ratio = 1
 core_margin = 1
 
-die = 61  # minimal die = 61
-# die = 60
+# die = 61  # minimal die = 61
+die = 60
 margin = 1
 
 place_density = 0.8  # near maximal density
@@ -42,11 +42,11 @@ with open('config.mk', 'w') as f:
     
     export('PLACE_DENSITY', '{}'.format(place_density))
 
-    # export('HAS_IO_CONSTRAINTS', '1')
-    # export('GUI_NO_TIMING', '1')
-    # export('ENABLE_DP0', '1')
-    # export('IO_PLACER_H', '{M3 M5}')
-    # export('IO_PLACER_V', '{M2 M4}')
+    export('SYNTH_HIERARCHICAL', 'true')
+    export('HAS_IO_CONSTRAINTS', 'true')
+    export('ENABLE_DP0', 'true')
+    export('GPL_ROUTABILITY_DRIVEN', 'true')
+    export('ABC_AREA', 'true')
 
 
 
@@ -63,8 +63,7 @@ def create_pin():
     pin_data = ['{}_data_{}'.format(prefix, suffix) for suffix in suffix_list]
     pin_bypass_list = []
     for bp in range(bypass):
-        pin_bypass_list.append(['{}_input_from_bypass[{}]'.format(prefix, bp)] + \
-                               ['{}_bypass_{}_{}'.format(prefix, bp, suffix) for suffix in suffix_list])
+        pin_bypass_list.append(['{}_bypass_{}_{}'.format(prefix, bp, suffix) for suffix in suffix_list])
     pin = []
     pin.extend(pin_data)
     for pin_bypass in pin_bypass_list:
